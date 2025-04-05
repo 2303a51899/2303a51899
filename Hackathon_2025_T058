@@ -1,0 +1,40 @@
+import random
+import time
+
+def parse_pdf(data):
+    """Simulate PDF parsing and trigger crash if 'CRASH' is found."""
+    if len(data) >= 5 and data[:5] == "CRASH":
+        print(f"Crash! Vulnerability triggered with input: {data}")
+        exit(1)  
+    print(f"Processed input: {data}")
+
+def generate_input(size):
+    """Generate random input consisting of uppercase letters."""
+    charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    return ''.join(random.choice(charset) for _ in range(size))
+
+def fuzz_pdf(max_tests, input_size):
+    """Run fuzzing tests."""
+    input_data = ""
+    print("Starting fuzzing harness for mock PDF parser...\n")
+
+    for i in range(max_tests):
+        
+        input_data = generate_input(input_size)
+
+        
+        if random.randint(1, 20) == 1:
+            input_data = "CRASH"  
+
+        print(f"Test #{i + 1}: ", end="")
+        parse_pdf(input_data)
+
+    print("\nFuzzing completed.")
+
+if __name__ == "__main__":
+    
+    max_tests = 100
+    input_size = 16
+
+  
+    fuzz_pdf(max_tests, input_size)
